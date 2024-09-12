@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href = "style.css">
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{base::html(
+        ~{::title},
+        ~{::content},
+        ~{::additionalCss},
+        ~{}
+    )}"
+>
+
+<th:block th:fragment="additionalCss">
+    <link rel="stylesheet" href="style.css">
+</th:block>
+
+<title>Atas Travel Gear</title>
+
+<th:block th:fragment="content">
     <h1>Welcome to TravelGear</h1>
     <img src="travel.jpg" id="champion-image"/>
-    <p>Your one-stop place to stock up on all your travelling essentials</p>
+    <p>Your one-stop place to stock up onall
+        your travelling essentials
+    </p>
     <p>Current Date Time: <span th:text="${currentDateTime}"></span></p>
-</body>
+</th:block>
+
+
 </html>
