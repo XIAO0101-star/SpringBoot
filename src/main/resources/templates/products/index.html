@@ -11,8 +11,11 @@
     <table class="table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Price</th>
+                <th>Category</th>
+                <th>Action</th>
             </tr>
         </thead>
     <tbody>
@@ -20,8 +23,11 @@
             <td th:text="${product.id}"></td>
             <td th:text="${product.name}"></td>
             <td th:text="${'$' + product.price}"></td>
+            <td th:text="${product.category.name}"></td>
             <td>
                 <a th:href="@{/products/{id}(id=${product.id})}">Product Details</a>
+                <a th:href="@{/products/{id}/edit(id=${product.id})}">Edit</a>
+                <a th:href="@{/products/{id}/delete(id=${product.id})}">Delete</a>
             </td>
         </tr>
     </tbody>

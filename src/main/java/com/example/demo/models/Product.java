@@ -3,6 +3,9 @@ package com.example.demo.models;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import org.hibernate.mapping.Set;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -97,4 +100,37 @@ public class Product {
    public int hashCode() {
        return Objects.hash(id, name, description, price);
    }
+   // Create the foreign key for the product
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "products_tags", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "tag_id")) 
+    private Set<Tag> tags = new HashSet<>();
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+        tag.getProducts().add(this);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+        tag.getProducts().remove(this);
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
 }

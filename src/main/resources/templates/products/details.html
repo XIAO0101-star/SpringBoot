@@ -13,6 +13,7 @@
         <li>Name: <span th:text="${product.name}"></span></li>
         <li>Description: <span th:text="${product.description}"></span></li>
         <li>Price: $<span th:text="${product.price}"></span></li>
+        <li>Category: $<span th:text="${product.category.name}"></span></li>
     </ul>
     <a href="/products" class="back-link">Back to Product List</a>
     <a th:href="@{/products/{id}/edit (id=${product.id})}">Edit Details</a>
