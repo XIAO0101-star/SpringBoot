@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html(
+    ~{::title},
+    ~{::content},
+    ~{},
+    ~{}
+)}">
+
+<title th:text="|Product Details: ${product.name}|"></title>
+
+    <h1>Product Details</h1>
+    <div class="product-details">
+        <p><strong>ID:</strong> <span th:text="${product.id}"></span></p>
+        <p><strong>Name:</strong> <span th:text="${product.name}"></span></p>
+        <p><strong>Description:</strong> <span th:text="${product.description}"></span></p>
+        <p><strong>Price:</strong> $<span th:text="${product.price}"></span></p>
+    </div>
+    <a href="/products" class="back-link">Back to Product List</a>
+
+</html>
