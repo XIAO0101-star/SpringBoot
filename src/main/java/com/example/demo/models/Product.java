@@ -3,6 +3,9 @@ package com.example.demo.models;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "products")
@@ -12,12 +15,15 @@ public class Product {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
+   @NotBlank(message = "Name cannot be blank")
+   @Size(min=2, max=100, message="Name must be between 2 and 100 characters")
    @Column(nullable = false)
    private String name;
 
    @Column(columnDefinition = "TEXT")
    private String description;
 
+   @DecimalMin(value="0.01", message="Price must be greater than 0.01")
    @Column(nullable = false, precision = 10, scale = 2)
    private BigDecimal price;
 
