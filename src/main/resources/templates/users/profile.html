@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::html(
+    ~{::title},
+    ~{::content},
+    ~{},
+    ~{}
+)}">
+
+<title>User Profile</title>
+
+<th:block th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">User Profile</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Username:</label>
+                        <p class="form-control-plaintext" th:text="${user.username}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email:</label>
+                        <p class="form-control-plaintext" th:text="${user.email}"></p>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="/" class="btn btn-primary">Home</a>
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-secondary">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>
