@@ -2,13 +2,13 @@ package com.example.demo.models;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
-
-import org.hibernate.mapping.Set;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.*;
 
 @Entity
 @Table(name = "products")
@@ -113,6 +113,8 @@ public class Product {
         this.category = category;
     }
 
+    // Add the reference to tags, use a set can contain many
+    // and can reject duplications
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "products_tags", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "tag_id")) 
     private Set<Tag> tags = new HashSet<>();

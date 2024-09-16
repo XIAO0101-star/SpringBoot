@@ -21,4 +21,14 @@
         </select>
         <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}" th:errors="*{category}" style="display:block"></div>
     </div>
+    <div class="mb-3">
+        <label for="tags" class="form-label">Tags:</label>
+        <select multiple class="form-control" id="tags" name="tagIds">
+            <option th:each="tag : ${allTags}"
+              th:value="${tag.id}"
+              th:text="${tag.name}"
+              th:selected="${product.tags != null and product.tags.contains(tag)}">
+            </option>
+         </select>
+     </div>
 </div>
