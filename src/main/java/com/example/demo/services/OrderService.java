@@ -1,77 +1,59 @@
 package com.example.demo.services;
 
+import org.springframework.stereotype.Service;
+
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
 import com.stripe.model.LineItem;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionListLineItemsParams;
-import com.stripe.param.checkout.SessionRetrieveParams;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.HashMap;
 
 @Service
 public class OrderService {
-
-    public OrderService() {
-
-    }
-
-    @Transactional
+    
     public void handleSuccessfulPayment(Event event) {
-        System.out.println(event);
-        System.out.println("STRIPE API VERSION = " + Stripe.API_VERSION);
+        System.out.println("STRIPE API VERSION =" + Stripe.API_VERSION);
+
+        // Get the session from the event
         Session session = (Session) event.getDataObjectDeserializer().getObject().get();
         String sessionId = session.getId();
-
+        long userId = Long.valueOf(session.getClientReferenceId());
+        System.out.println("Userid =" + userId);
         try {
 
-            // expand each line item so that we can get the product id and quantity
-            // Retrieve the session with line items expanded
-             SessionListLineItemsParams listItemParams = SessionListLineItemsParams.builder()
-                    .addExpand("data.price.product")
-                    .build();
+            // expand each line item
+            SessionListLineItemsParams listItemParams = SessionListLineItemsParams.builder()
+                                    .addExpand("data.price.product")
+                                    .build();
+
+            
+            // get the data for each of them
             List<LineItem> lineItems = session.listLineItems(listItemParams).getData();
 
+            // Store a dictionary (aka map) of product_id to quantity
             Map<String, Long> orderedProducts = new HashMap<>();
 
             for (LineItem item : lineItems) {
-                String productId =  item.getPrice()
-                                    .getProductObject()
-                                    .getMetadata().
-                                    get("product_id");
+                String productId = item.getPrice().getProductObject().getMetadata().get("product_id");
                 if (productId == null || productId.isEmpty()) {
-                    System.err.println("Product ID not found for: " + item.getId());
-                    continue; // Skip this item
+                    System.out.println("Unable to get product id for line item " + item);
+                    continue; // skip the rest of the lines in the loop and start a new iteration
                 }
                 long quantity = item.getQuantity();
                 orderedProducts.put(productId, quantity);
             }
 
-            String customerId = session.getCustomer();
-            String paymentIntentId = session.getPaymentIntent();
             System.out.println(orderedProducts);
 
-            System.out.println("Payment was successful. PaymentIntent ID: " + paymentIntentId);
+
         } catch (StripeException e) {
             System.out.println(e);
         }
 
-    }
-
-    @Transactional
-    public void handleInvoicePaid(Event event) {
-        // Handle paid invoice, if applicable to your system
-    }
-
-    @Transactional
-    public void handlePaymentFailed(Event event) {
-        // Handle failed payment
-        // You might want to notify the user, mark the order as failed, etc.
     }
 }

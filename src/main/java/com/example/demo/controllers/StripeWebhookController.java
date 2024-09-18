@@ -15,39 +15,48 @@ import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
 
+
+// a @RestController by default will send back JSON
+// a @Controller by default will render a template
 @RestController
 @RequestMapping("/stripe/webhook")
 public class StripeWebhookController {
-   
+    
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
-
-    private OrderService orderService;
+    
+    private final OrderService orderService;
 
     @Autowired
     public StripeWebhookController(OrderService orderService) {
         this.orderService = orderService;
     }
 
+    // Stripe-Signature: whenever Stripe calls our endpoint (aka route),
+    // it will enclose a signature for security purpose
     @PostMapping
     public ResponseEntity<String> handleStripeEvent(@RequestBody String payload,
-        @RequestHeader("Stripe-Signature") String sigHeader ) {
-            Event event;
-            System.out.println("Stripe webhook called");
-            try {
-                event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
-            } catch (SignatureVerificationException e) {
-                System.out.println(e);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid signature");
-            }
-           
-            //System.out.println(event);
-            orderService.handleSuccessfulPayment(event);
+        @RequestHeader("Stripe-Signature") String sigHeader) {
 
-
-            if (event.getType() == "checkout.session.completed") {
-                System.out.println(event);
-            }
-            return ResponseEntity.ok().build();
+        // Extract the event from the request and verify that it's really from Stripe
+        Event event = null;
+        System.out.println("Stripe webhook called");
+        try {
+            // construct the event
+            event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
+        } catch (SignatureVerificationException e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid signature");
         }
+
+        System.out.println(event);
+
+        if (event.getType().equals("checkout.session.completed")) {
+            orderService.handleSuccessfulPayment(event);
+        }
+
+        return ResponseEntity.ok().build();  // send back HTTP Status Code 200
+
+    }
+    
 }

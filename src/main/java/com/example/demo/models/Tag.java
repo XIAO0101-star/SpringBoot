@@ -1,39 +1,34 @@
 package com.example.demo.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+import java.util.Objects;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "tags")
 public class Tag {
-
+    // Primary key, set to auto-increment
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name cannot be blank")
-    @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters")
-    @Column(nullable = false, unique = true)
+    @Column(nullable=false, unique = true)
     private String name;
 
+    // mappedBy is always in context of other side of the relationship
+    // meaning, the Product model is supposed to have a `tags` property
     @ManyToMany(mappedBy = "tags")
-    private Set<Product> products = new HashSet<>();
+    private  Set<Product> products = new HashSet<>();
 
-    // Default constructor
-    public Tag() {}
+    public Tag() {
+    }
 
-    // Constructor with name
     public Tag(String name) {
         this.name = name;
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -58,13 +53,16 @@ public class Tag {
         this.products = products;
     }
 
-    // Helper method to add a product
+    // Helper methods to faciliate the adding and removal of products
+    // from a tag
     public void addProduct(Product product) {
+        // the unique nature of set means that we don't have to check
+        // if the product exist, because a set will automatically reject
+        // duplicates
         this.products.add(product);
         product.getTags().add(this);
     }
 
-    // Helper method to remove a product
     public void removeProduct(Product product) {
         this.products.remove(product);
         product.getTags().remove(this);
@@ -93,4 +91,6 @@ public class Tag {
     public int hashCode() {
         return Objects.hash(id, name);
     }
+    
+
 }

@@ -1,22 +1,25 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html(
-    ~{::title},
-    ~{::content},
-    ~{},
-    ~{}
-)}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: html(
+          ~{::title},
+          ~{::content},
+          ~{},
+          ~{}
+      )}">
 
 <title th:text="|Product Details: ${product.name}|"></title>
+
 <th:block th:fragment="content">
     <h1>Product Details</h1>
     <ul>
         <li>ID: <span th:text="${product.id}"></span></li>
         <li>Name: <span th:text="${product.name}"></span></li>
         <li>Description: <span th:text="${product.description}"></span></li>
-        <li>Price: $<span th:text="${product.price}"></span></li>
-        <li>Category: $<span th:text="${product.category.name}"></span></li>
+        <li>Price: <span th:text="${product.price}"></span></li>
+        <li>Category: <span th:text="${product.category.name}"></span></li>
     </ul>
-    <a href="/products" class="back-link">Back to Product List</a>
-    <a th:href="@{/products/{id}/edit (id=${product.id})}">Edit Details</a>
-    <a th:href="@{/products/{id}/delete (id=${product.id})}">Delete Product</a>
+
 </th:block>
+
+
+
 </html>

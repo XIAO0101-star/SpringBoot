@@ -1,37 +1,38 @@
 package com.example.demo.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.*;
+import jakarta.validation.*;
+
 @Entity
 @Table(name = "categories")
 public class Category {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name cannot be blank")
-    @Size(min=2, max=100, message="Name must be between 2 and 100 characters")
     @Column(nullable = false, unique = true)
     private String name;
 
+    // indicates that one category contains many products
+    // make sur the `mappedBy` matches the name of the variable
+    // in the other side of the relationship that stores the foreign key
     @OneToMany(mappedBy = "category", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
-    // Default constructor
-    public Category() {}
+    
 
-    // Constructor with name
+    public Category() {
+    }
+
     public Category(String name) {
         this.name = name;
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -79,4 +80,7 @@ public class Category {
     public int hashCode() {
         return Objects.hash(id, name);
     }
+
+
+
 }

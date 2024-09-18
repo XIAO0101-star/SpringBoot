@@ -2,37 +2,34 @@ package com.example.demo.models;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // one user can own many cart items
+    // a cart item is only owned by one user
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name="product_id", nullable = false)
+    private Product product;
 
     private int quantity;
-   
-    public CartItem() {
 
+    public CartItem() {
     }
 
     public CartItem(User user, Product product, int quantity) {
-        this.user = user;
-        this.product = product;
         this.quantity = quantity;
+        this.product = product;
+        this.user = user;
     }
 
     public Long getId() {
@@ -51,14 +48,6 @@ public class CartItem {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -66,25 +55,16 @@ public class CartItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
- 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
-     // Convenience method to calculate the total price for this cart item
+    public Product getProduct() {
+        return product;
+    }
+
     public BigDecimal getTotalPrice() {
         return product.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
-
-    // toString method
-    @Override
-    public String toString() {
-        return "CartItem{" +
-                "id=" + id +
-                ", user=" + user.getUsername() +
-                ", product=" + product.getName() +
-                ", quantity=" + quantity +
-                '}';
-    }   
 }

@@ -1,16 +1,17 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{ base :: html(
-    ~{::title},
-    ~{::content},
-    ~{},
-    ~{}
-)
-}">
+            ~{::title},
+            ~{::content},
+            ~{},
+            ~{}
+        )
+    }">
 
 <title>Delete Product</title>
 
 <th:block th:fragment="content">
-    <div class="alert alert-danger" role="alert">
-        Are you sure you want to delete this product?
+    <div class="alert alert-danger">
+        Are you sure you want to this product?
         <ul>
             <li>Name: <span th:text="${product.name}"></span></li>
             <li>Price: <span th:text="${product.price}"></span></li>
@@ -18,8 +19,9 @@
         </ul>
         <form method="POST">
             <button type="submit" class="btn btn-danger">Confirm Delete</button>
-            <a th:href="@{/products}" class="btn btn-secondary">Cancel</a>
+            <a th:href="@{/products}" class="btn btn-success">Cancel</a>
         </form>
+
     </div>
 </th:block>
 
