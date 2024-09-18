@@ -34,16 +34,16 @@ public class CartController {
         this.userService = userService;
     }
 
-     @GetMapping
-    public String viewCart(Model model, Principal principal) {
-        User user = userService.findUserByUsername(principal.getName());
-        List<CartItem> cartItems = cartItemService.findByUser(user);
-        model.addAttribute("cartItems", cartItems);
+    @GetMapping("")
+        public String viewCart(Model model, Principal principal) {
+            User user = userService.findUserByUsername(principal.getName());
+            List<CartItem> cartItems = cartItemService.findByUser(user);
+            model.addAttribute("cartItems", cartItems);
        
-        return "cart/index";
-    }
+            return "cart/index";
+        }
 
-     @GetMapping("/{cartItemId}/remove")
+    @GetMapping("/{cartItemId}/remove")
     public String removeFromCart(@PathVariable Long cartItemId,
                                  Principal principal,
                                  RedirectAttributes redirectAttributes) {

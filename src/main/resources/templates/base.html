@@ -11,6 +11,18 @@
     <th:block th:replace="${additionalCss} ?: ~{}"></th:block>
 </head>
 
+  <!-- Flash Messages -->
+  <div class="container mt-3" th:if="${message}">
+    <div  class="alert alert-success" role="alert">
+        <span th:text="${message}"></span>
+    </div>
+</div>
+<div class="container mt-3" th:if="${errors}">
+    <div th:if="${errors}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+</div>
+
 <body>
     <div id="container">
         <!-- A grey horizontal navbar that becomes vertical on small screens -->

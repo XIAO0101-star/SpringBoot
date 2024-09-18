@@ -3,21 +3,14 @@ import com.example.demo.models.CartItem;
 import com.example.demo.models.Product;
 import com.example.demo.models.User;
 import com.example.demo.repo.CartItemRepo;
-import com.example.demo.controllers.CartController;
-
 
 import jakarta.transaction.Transactional;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
 public class CartItemService {
@@ -54,8 +47,6 @@ public class CartItemService {
         existingItem.setQuantity(newQuantity);
         cartItemRepo.save(existingItem);
     }
-
-
 
     @Transactional
     public void removeFromCart(long cartItemId, User user) {

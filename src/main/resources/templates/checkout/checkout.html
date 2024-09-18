@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Redirecting to Stripe, please wait...</h1>
+    <script src="https://js.stripe.com/v3"></script>
+    <script th:inline="javascript">
+        let stripe = Stripe([[$,{stripePublicKey}]]);
+        stripe.redirectToCheckout({
+            sessionId: [[$,{sessionId}]]
+        })
+    </script>
+</body>
+</html>

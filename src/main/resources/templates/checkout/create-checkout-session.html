@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: html(~{::title}, ~{::main}, ~{}, ~{::script})}">
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+    <main>
+        <h1>Redirecting to Checkout...</h1>
+        <p>Please wait while we redirect you to the secure checkout page.</p>
+    </main>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script th:inline="javascript">
+        var stripe = Stripe([[$,{stripePublicKey}]]);
+        stripe.redirectToCheckout({
+            sessionId: [[$,{sessionId}]]
+        }).then(function (result) {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        });
+    </script>
+</body>
+</html>

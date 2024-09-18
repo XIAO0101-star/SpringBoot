@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{
+        base::html(
+            ~{::title},
+            ~{::content},
+            ~{},
+            ~{}
+        )
+    }"
+
+>
+
+<title>Shopping Cart</title>
+
+<th:block th:fragment="content">
+    <h1 class="mb-4">Your Shopping Cart</h1>
+    <div th:if="${#lists.isEmpty(cartItems)}" class="alert alert-info">
+        Your cart is empty.
+    </div>
+    <div th:unless="${#lists.isEmpty(cartItems)}">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${cartItems}">
+                    <td th:text="${item.product.name}"></td>
+                    <td>
+                        <form th:action="@{cart/{cartItemId}/updateQuantity(cartItemId=${item.id})}" method="post"
+                            class="d-inline">
+                            <input type="text" th:value="${item.quantity}" name="newQuantity"
+                                class="form-control form-control-sm d-inline" style="width: 60px;" />
+                            <button type="submit" class="btn btn-sm btn-success">Update</button>
+                        </form>
+                    </td>
+                    <td th:text="${#numbers.formatCurrency(item.product.price)}"></td>
+                    <td th:text="${#numbers.formatCurrency(item.totalPrice)}"></td>
+                    <td>
+                        <a th:href="@{/cart/{id}/remove(id=${item.id})}" class="btn btn-danger btn-sm">Remove</a>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                    <td th:text="${#numbers.formatCurrency(#aggregates.sum(cartItems.![totalPrice]))}" class="fw-bold">
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="d-flex justify-content-between">
+            <a href="/" class="btn btn-secondary">Continue Shopping</a>
+            <a href="/checkout/create-checkout-session" class="btn btn-primary">Proceed to Checkout</a>
+        </div>
+    </div>
+</th:block>
+
+</html>
