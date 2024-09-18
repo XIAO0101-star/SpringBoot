@@ -9,9 +9,9 @@
     <h1>Redirecting to Stripe, please wait...</h1>
     <script src="https://js.stripe.com/v3"></script>
     <script th:inline="javascript">
-        let stripe = Stripe([[$,{stripePublicKey}]]);
+        let stripe = Stripe([[${stripePublicKey}]]);
         stripe.redirectToCheckout({
-            sessionId: [[$,{sessionId}]]
+            sessionId: [[${sessionId}]]
         })
     </script>
 </body>
