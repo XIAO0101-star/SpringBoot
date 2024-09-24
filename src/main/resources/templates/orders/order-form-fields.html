@@ -1,0 +1,13 @@
+<div th:fragment="fields">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    <div>
+      <label for="status" class="form-label">Order Status:</label>
+      <select class="form-control" th:field="*{status}" required>
+        <option
+          th:each="status : ${allStatus}"
+          th:value="${status.id}"
+          th:text="${status.name}"
+        ></option>
+      </select>
+    </div>
+  </div>

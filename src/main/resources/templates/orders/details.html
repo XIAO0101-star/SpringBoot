@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{
+    base::html(
+        ~{::title},
+        ~{::content},
+        ~{},
+        ~{}
+    )
+}"
+>
+  <title th:text="|Order Details: ${order.id}|"></title>
+  <th:block th:fragment="content">
+    <h1>Order Details</h1>
+    <ul>
+      <li>
+        <strong>Order ID:</strong>
+        <span th:text="${order.id}"></span>
+      </li>
+      <li>
+        <strong>User name:</strong>
+        <span th:text="${user.username}"></span>
+      </li>
+      <li>
+        <strong>User email:</strong>
+        <span th:text="${user.email}"></span>
+      </li>
+    </ul>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product ID</th>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="item : ${order_item}">
+          <td th:text="${item.id}"></td>
+          <td th:text="${item.product.name}"></td>
+          <td th:text="${item.quantity}"></td>
+          <td th:text="${item.price}"></td>
+          <td th:text="${item.quantity * item.price}"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button 
+      type="submit" 
+      class="btn btn-primary" 
+      onclick="window.history.back();"
+    >
+      Return
+    </button>
+  </th:block>
+</html>

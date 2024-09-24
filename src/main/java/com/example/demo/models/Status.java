@@ -1,34 +1,32 @@
 package com.example.demo.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import java.util.Objects;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import jakarta.persistence.*;
 
 @Entity
-@Table(name = "categories")
-public class Category {
-    
+@Table(name = "status")
+public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Name cannot be blank")
+    @Size(min=2, max=100, message="Name must be between 2 and 100 characters")
+    @Column(nullable=false, unique = true)
     private String name;
 
-    // indicates that one category contains many products
-    // make sur the `mappedBy` matches the name of the variable
-    // in the other side of the relationship that stores the foreign key
-    @OneToMany(mappedBy = "category", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "status", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Order> order = new ArrayList<>();
 
-    
-
-    public Category() {
+    public Status() {
     }
 
-    public Category(String name) {
+    public Status(String name) {
         this.name = name;
     }
 
@@ -48,18 +46,18 @@ public class Category {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Order> getOrder() {
+        return order;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setOrder(List<Order> order) {
+        this.order = order;
     }
 
     // toString method
     @Override
     public String toString() {
-        return "Category{" +
+        return "Status{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
@@ -70,16 +68,13 @@ public class Category {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return Objects.equals(id, category.id) &&
-                Objects.equals(name, category.name);
+        Status status = (Status) o;
+        return Objects.equals(id, status.id) &&
+                Objects.equals(name, status.name);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
     }
-
-
-
 }
